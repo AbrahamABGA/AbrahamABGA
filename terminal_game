@@ -1,0 +1,187 @@
+#terminal_game
+# for some reason in the first try the terminal say --> ValueError: invalid literal for int() 
+# In the second try the program works
+
+import random
+
+# RPG Battle!
+
+# player info
+player_hp = 100
+player_power = 10
+player_special = 30
+player_defense = 1
+player_cures = 3
+
+#enemy info
+enemy_hp = 300
+enemy_power = random.randint(10, 30)
+enemy_special = 50
+enemy_defense = 1
+
+#main menu
+print('+---------------------------+')
+print('        RPG BATTLE!          ')
+print('       1) Start              ')
+print('       2) Exit               ')
+print('+---------------------------+')
+
+#select option
+option = int(input('Select an option: '))
+
+#exit game or wrong input
+while option !=1:
+    if option == 2:
+        print('Bye!')
+        quit()
+    else:
+        print('Wrong input')
+        option = int(input('Select an option: '))
+
+#battle starts
+print('+-------------------------------+')
+print('     You found a powerful foe!  ')
+print('+-------------------------------+')
+
+#battle system
+while enemy_hp > 0 and player_hp > 0:
+
+    #reset player defense    
+    player_defense = 1
+
+    # Battle status
+    print('+-------------------------------+')
+    print('  HP: ',player_hp ,'             ')
+    print('                                 ')
+    print('                   Enemy: ',enemy_hp)
+    print('+-------------------------------+')
+
+    #Player actions
+    print('Your turn:')
+    print('1) Attack!')
+    print('2) Special! (cost 10 hp)')
+    print('3) Defend!')
+    print('4) Cure! Left:',player_cures)
+
+    #Input action
+    action = int(input('Action: '))
+    
+    #Normal attack 10 dmg 
+    if action == 1:
+        print('+-------------------------------+')
+        print('   You deal',(player_power/enemy_defense),'damage to foe!    ')
+        print('+-------------------------------+')
+        enemy_hp = enemy_hp-(player_power/enemy_defense)
+
+    #Special attack 30 dmg, cost 10 hp
+    elif action == 2:
+        print('+------------------------------ +')
+        print('         Special attack!    ')
+        print('+-------------------------------+')
+        print('+-------------------------------+')
+        print('   You deal',(player_special/enemy_defense),'damage to foe!    ')
+        print('+-------------------------------+')
+        print('+-------------------------------+')
+        print('      You receive 10 damege!    ')
+        print('+-------------------------------+')
+        enemy_hp =enemy_hp-(player_special/enemy_defense)
+        player_hp =player_hp-10
+    
+    #Defense up, double defense    
+    elif action == 3:
+        print('+------------------------------ +')
+        print('            Defense up!    ')
+        print('+-------------------------------+')
+        player_defense = 2
+
+    #Cure, cures 100 hp    
+    elif action == 4:
+        if player_cures == 0:
+            print('+------------------------------ +')
+            print('         No cures left!    ')
+            print('+-------------------------------+')
+        else:
+            print('+------------------------------ +')
+            print('        You recover 100 hp!    ')
+            print('+-------------------------------+')
+            player_hp = player_hp+100
+            player_cures = player_cures-1
+    #Wrong input        
+    else:
+        print('+------------------------------ +')
+        print('          END OF TURN    ')
+        print('+-------------------------------+')      
+#Enemy turn text
+    print('+------------------------------ +')
+    print("           Enemy Turn!    ")
+    print('+-------------------------------+')
+    
+#reset enemy defense
+    enemy_defense = 1
+
+#Enemy power random inside the while 
+    enemy_power = random.randint(10, 30)
+
+    #Enemy actions random
+    # 1. Normal Attack
+    # 2. Chance of Mortal Damage
+    # 3. Defense up 
+    enemy_action = random.randint(1,3)
+
+    #Second filter for the enemy special to low the difficulty
+    # 1. Normal Attack
+    # 2. Mortal Damage 
+    mortal_chance =random.randint(1,2)
+ 
+
+#Enemy actions, and enemy_hp > 0 to prevent the enemy turn after the player win
+    if enemy_action == 1 and enemy_hp > 0:
+        print('+-------------------------------+')
+        print('      You receive',(enemy_power/player_defense), 'damege!    ')
+        print('+-------------------------------+')
+        player_hp =player_hp - (enemy_power/player_defense)
+    #Enemy special attack    
+    elif enemy_action == 2 and mortal_chance == 1 and enemy_hp > 0:
+        print('+-------------------------------+')
+        print('      You receive',(enemy_power/player_defense), 'damege!    ')
+        print('+-------------------------------+')
+        player_hp =player_hp - (enemy_power/player_defense)
+    #Enemy special attack      
+    elif enemy_action == 2 and mortal_chance == 2 and enemy_hp > 0:
+        print('+------------------------------ +')
+        print('    Enemy deals mortal damage!    ')
+        print('+-------------------------------+') 
+        print('+------------------------------ +')
+        print('      You receive',(enemy_special/player_defense),' damage!    ')
+        print('+-------------------------------+')
+        player_hp = player_hp - (enemy_special/player_defense)
+    # enemy double defense    
+    elif enemy_action == 3 and enemy_hp > 0:
+        print('+------------------------------ +')
+        print("      Enemy's defense up! ")
+        print('+-------------------------------+')
+        enemy_defense = 2
+     
+    elif enemy_hp < 0:
+        break
+    #Enemy destroy
+    else:
+        print('+------------------------------ +')
+        print("           Enemy fall! ")
+        print('+-------------------------------+')
+
+#Battle END
+if enemy_hp <= 0:
+    print('+------------------------------ +')
+    print("      You destroy the enemy! ")
+    print('+-------------------------------+')
+elif player_hp <=0:
+    print('+------------------------------ +')
+    print("      You got exterminated! ")
+    print('+-------------------------------+')
+
+print('+------------------------------ +')
+print("        Thanks for playing! ")
+print('+-------------------------------+')
+
+input()
